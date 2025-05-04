@@ -118,7 +118,8 @@ CREATE TABLE `customer` (
   `email` varchar(255) DEFAULT NULL,
   `province_id` varchar(10) DEFAULT NULL,
   `district_id` varchar(10) DEFAULT NULL,
-  `address_detail` text DEFAULT NULL
+  `address_detail` text DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

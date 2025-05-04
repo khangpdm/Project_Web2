@@ -13,18 +13,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         $product = $db->getById('product', $_GET['id']);
         if ($product === false) {
             $response['message'] = 'Sản phẩm không tồn tại.';
-        } elseif ($product['soluong'] == 0) {
-            // Nếu số lượng bằng 0, không xóa mà trả về thông báo đã bán hết
-            // Removed restriction to allow deletion of sold-out products
-            // Proceed to delete product
-            $result = $db->delete('product', $_GET['id']);
-            
-            // Kiểm tra xem có bản ghi nào bị ảnh hưởng không
-            if ($result->rowCount() > 0) {
+        } else {
+            // Cập nhật số lượng sản phẩm về 0 thay vì xóa
+            $sql = "UPDATE product SET soluong = 0 WHERE masp = :id";
+            $result = $db->query($sql, ['id' => $_GET['id']]);
+            if ($result) {
                 $response['success'] = true;
-                $response['message'] = 'Đã xóa sản phẩm thành công.';
+                $response['message'] = 'Đã cập nhật số lượng sản phẩm về 0.';
             } else {
-                $response['message'] = 'Sản phẩm không tìm thấy hoặc đã được xóa.';
+                $response['message'] = 'Không thể cập nhật số lượng sản phẩm.';
             }
         }
     } catch (PDOException $e) {

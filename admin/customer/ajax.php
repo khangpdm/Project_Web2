@@ -16,22 +16,28 @@ switch ($action) {
         $params = [];
         $where = " WHERE 1=1 ";
         if ($id !== '') {
-            $where .= " AND macustomer LIKE :id ";
+            $where .= " AND c.macustomer LIKE :id ";
             $params['id'] = "%$id%";
         }
         if ($name !== '') {
-            $where .= " AND name LIKE :name ";
+            $where .= " AND c.name LIKE :name ";
             $params['name'] = "%$name%";
         }
 
-        $totalQuery = "SELECT COUNT(*) FROM customer $where";
+        $totalQuery = "SELECT COUNT(*) FROM customer c $where";
         $totalStmt = $db->query($totalQuery, $params);
         $totalRecordsCount = $totalStmt->fetchColumn();
 
         $totalPages = ceil($totalRecordsCount / $per_page);
         $offset = ($page - 1) * $per_page;
 
-        $query = "SELECT * FROM customer $where ORDER BY macustomer ASC LIMIT $offset, $per_page";
+        $query = "SELECT c.*, p.name AS province_name, d.name AS district_name 
+                  FROM customer c 
+                  LEFT JOIN provinces p ON c.province_id = p.province_id 
+                  LEFT JOIN districts d ON c.district_id = d.district_id 
+                  $where 
+                  ORDER BY c.macustomer ASC 
+                  LIMIT $offset, $per_page";
         $stmt = $db->query($query, $params);
         $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -64,14 +70,17 @@ switch ($action) {
             echo json_encode(['success' => false, 'message' => 'Dữ liệu không hợp lệ']);
             exit;
         }
+        $username = trim($data['username'] ?? '');
         $name = trim($data['name'] ?? '');
         $email = trim($data['email'] ?? '');
-        $powergroupid = trim($data['powergroupid'] ?? '');
         $phone = trim($data['phone'] ?? '');
+        $province_id = trim($data['province_id'] ?? '');
+        $district_id = trim($data['district_id'] ?? '');
+        $address_detail = trim($data['address_detail'] ?? '');
         $password = $data['password'] ?? '';
 
-        if ($name === '' || $email === ''|| $powergroupid === '' || $phone === '' || $password === '') {
-            echo json_encode(['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin']);
+        if ($username === '' || $name === '' || $email === '' || $phone === '' || $password === '') {
+            echo json_encode(['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin bắt buộc']);
             exit;
         }
 
@@ -84,10 +93,13 @@ switch ($action) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $customerData = [
+            'username' => $username,
             'name' => $name,
             'email' => $email,
-            'powergroupid' => $powergroupid,
             'phone' => $phone,
+            'province_id' => $province_id ?: null,
+            'district_id' => $district_id ?: null,
+            'address_detail' => $address_detail ?: null,
             'password' => $hashedPassword,
         ];
 
@@ -102,14 +114,17 @@ switch ($action) {
             exit;
         }
         $id = $data['id'] ?? '';
+        $username = trim($data['username'] ?? '');
         $name = trim($data['name'] ?? '');
         $email = trim($data['email'] ?? '');
-        $powergroupid = trim($data['powergroupid'] ?? '');
         $phone = trim($data['phone'] ?? '');
+        $province_id = trim($data['province_id'] ?? '');
+        $district_id = trim($data['district_id'] ?? '');
+        $address_detail = trim($data['address_detail'] ?? '');
         $password = $data['password'] ?? '';
 
-        if ($id === '' || $name === '' || $powergroupid === '' || $email === '' || $phone === '') {
-            echo json_encode(['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin']);
+        if ($id === '' || $username === '' || $name === '' || $email === '' || $phone === '') {
+            echo json_encode(['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin bắt buộc']);
             exit;
         }
 
@@ -120,10 +135,13 @@ switch ($action) {
         }
 
         $updateData = [
+            'username' => $username,
             'name' => $name,
             'email' => $email,
-            'powergroupid' => $powergroupid,
             'phone' => $phone,
+            'province_id' => $province_id ?: null,
+            'district_id' => $district_id ?: null,
+            'address_detail' => $address_detail ?: null,
         ];
 
         if ($password !== '') {
@@ -132,6 +150,30 @@ switch ($action) {
 
         $updated = $db->update('customer', $updateData, $id);
         echo json_encode(['success' => (bool)$updated]);
+        break;
+
+    case 'toggle_status':
+        try {
+            $id = $_POST['id'] ?? '';
+            if ($id === '') {
+                echo json_encode(['success' => false, 'message' => 'ID không hợp lệ']);
+                exit;
+            }
+            $customer = $db->getById('customer', $id);
+            if (!$customer) {
+                echo json_encode(['success' => false, 'message' => 'Khách hàng không tồn tại']);
+                exit;
+            }
+            $newStatus = ($customer['status'] == 1) ? 0 : 1;
+            $updated = $db->update('customer', ['status' => $newStatus], $id);
+            if ($updated) {
+                echo json_encode(['success' => true, 'newStatus' => $newStatus]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Cập nhật trạng thái thất bại']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'Lỗi server: ' . $e->getMessage()]);
+        }
         break;
 
     default:

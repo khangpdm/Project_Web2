@@ -91,12 +91,12 @@ input:not([type="submit"]):focus {
 }
 
 /* Label của các input */
-label {
+label.signin {
     color: #d2f8d2;
 }
 
 /* Nút submit */
-input[type="submit"] {
+input.signin {
     width: 100%;
     padding: 12px;
     border: none;
@@ -110,7 +110,7 @@ input[type="submit"] {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-input[type="submit"]:hover {
+input.signin:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }

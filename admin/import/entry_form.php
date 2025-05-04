@@ -40,8 +40,7 @@ if ($maphieunhap) {
 
     // Load detail products
     $sql = "SELECT d.*, p.tensp FROM detail_entry_form d JOIN product p ON d.masp = p.masp WHERE d.maphieunhap = ?";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$maphieunhap]);
+    $stmt = $db->query($sql, [$maphieunhap]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($result as $row) {
         $details[] = $row;
@@ -86,8 +85,7 @@ if ($maphieunhap) {
         <select name="masp" id="masp" required>
             <option value="">-- Chọn sản phẩm --</option>
             <?php
-            $stmt = $db->prepare("SELECT masp, tensp FROM product WHERE mancc = ?");
-            $stmt->execute([$voucher['mancc']]);
+            $stmt = $db->query("SELECT masp, tensp FROM product WHERE mancc = ?", [$voucher['mancc']]);
             $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($products as $product):
             ?>

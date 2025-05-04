@@ -1,8 +1,7 @@
 <?php 
-    $db_name = "treeshop";
+    $db_name = "treeshop1";
     $db_user = "root";
-    $db_pass = "123";
-    $db_port = 3306;
+    $db_pass = "";
     $db_host = "localhost";
 
     // Kết nối đến cơ sở dữ liệu MySQL

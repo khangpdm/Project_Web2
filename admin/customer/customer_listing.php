@@ -57,7 +57,7 @@
                 <th>ID</th>
                 <th>Họ và Tên</th>
                 <th>Email</th>
-                <th>Nhóm quyền</th>
+                <!-- Removed Nhóm quyền column header -->
                 <th>Số điện thoại</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
@@ -81,21 +81,29 @@
         <form id="editCustomerForm">
             <input type="hidden" id="edit-id" name="id">
 
+            <label for="edit-username">Tên đăng nhập</label>
+            <input type="text" id="edit-username" name="username" required>
+
             <label for="edit-name">Họ và Tên</label>
             <input type="text" id="edit-name" name="name" required>
 
             <label for="edit-email">Email</label>
             <input type="email" id="edit-email" name="email" required>
 
-            <label for="edit-powergroupid">Nhóm quyền</label>
-            <select id="edit-powergroupid" name="powergroupid" required>
-                <?php foreach($powergroups as $powergroup) :?>
-                <option value="<?=$powergroup['powergroupid'] ?>"><?=$powergroup['powergroupname']?></option>
-                <?php endforeach; ?>
-            </select>
+            <label for="edit-province_id">Tỉnh/Thành phố</label>
+            <input type="text" id="edit-province_id" name="province_id">
+
+            <label for="edit-district_id">Quận/Huyện</label>
+            <input type="text" id="edit-district_id" name="district_id">
+
+            <label for="edit-address_detail">Địa chỉ chi tiết</label>
+            <textarea id="edit-address_detail" name="address_detail" rows="3" style="resize:none; width: 100%;"></textarea>
 
             <label for="edit-phone">Số điện thoại</label>
             <input type="text" id="edit-phone" name="phone" required>
+
+            <label for="edit-password">Mật khẩu mới (để trống nếu không đổi)</label>
+            <input type="password" id="edit-password" name="password">
 
             <button type="submit" class="save-btn">Cập nhật</button>
         </form>
@@ -108,18 +116,23 @@
         <span class="close-btn">&times;</span>
         <h3>Thêm khách hàng</h3>
         <form action="customer/add_customer.php" method="POST">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" name="username" required>
+
             <label for="name">Họ và Tên</label>
             <input type="text" id="name" name="name" required>
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="powergroupid">Nhóm quyền</label>
-            <select id="powergroupid" name="powergroupid" required>
-                <?php foreach($powergroups as $powergroup) :?>
-                <option value="<?=$powergroup['powergroupid'] ?>"><?=$powergroup['powergroupname']?></option>
-                <?php endforeach; ?>
-            </select>
+            <label for="province_id">Tỉnh/Thành phố</label>
+            <input type="text" id="province_id" name="province_id">
+
+            <label for="district_id">Quận/Huyện</label>
+            <input type="text" id="district_id" name="district_id">
+
+            <label for="address_detail">Địa chỉ chi tiết</label>
+            <textarea id="address_detail" name="address_detail" rows="3" style="resize:none; width: 100%;"></textarea>
 
             <label for="phone">Số điện thoại</label>
             <input type="text" id="phone" name="phone" required>
@@ -189,33 +202,53 @@ function updateCustomerList(customers) {
     const customerList = $('#customer-list');
     customerList.empty();
     customers.forEach(customer => {
+        const statusText = customer.status == 1 ? 'Active' : 'Locked';
+        const toggleButtonText = customer.status == 1 ? 'Lock' : 'Unlock';
         const row = `
             <tr id="customer-${customer.macustomer}">
                 <td>${customer.macustomer}</td>
                 <td>${customer.name}</td>
-                <td>${customer.powergroupid}</td
                 <td>${customer.email}</td>
+                <!-- Removed powergroupid display column -->
                 <td>${customer.phone}</td>
+                <td>${statusText}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm edit-btn permission-sua" data-id="${customer.macustomer}" data-name="${customer.name}" data-powergroupid="${customer.powergroupid}" data-email="${customer.email}" data-phone="${customer.phone}">Sửa</button>
+                    <button class="btn btn-warning btn-sm edit-btn permission-sua"
+                        data-id="${customer.macustomer}"
+                        data-username="${customer.username || ''}"
+                        data-name="${customer.name || ''}"
+                        data-email="${customer.email || ''}"
+                        data-province_name="${customer.province_name || ''}"
+                        data-district_name="${customer.district_name || ''}"
+                        data-address_detail="${customer.address_detail || ''}"
+                        data-phone="${customer.phone || ''}"
+                    >Sửa</button>
                     <button class="btn btn-danger btn-sm delete-btn permission-xoa" data-id="${customer.macustomer}">Xóa</button>
+                    <button class="btn btn-secondary btn-sm toggle-status-btn" data-id="${customer.macustomer}">${toggleButtonText}</button>
                 </td>
             </tr>
         `;
         customerList.append(row);
     });
 
-    // Attach event listeners for edit and delete buttons
+    // Attach event listeners for edit, delete, and toggle status buttons
     $('.edit-btn').click(function() {
         const id = $(this).data('id');
+        const username = $(this).data('username');
         const name = $(this).data('name');
         const email = $(this).data('email');
+        const province_name = $(this).data('province_name');
+        const district_name = $(this).data('district_name');
+        const address_detail = $(this).data('address_detail');
         const phone = $(this).data('phone');
 
         $('#edit-id').val(id);
+        $('#edit-username').val(username);
         $('#edit-name').val(name);
-        $('#edit-powergroupid').val(powergroupid);
         $('#edit-email').val(email);
+        $('#edit-province_id').val(province_name);
+        $('#edit-district_id').val(district_name);
+        $('#edit-address_detail').val(address_detail);
         $('#edit-phone').val(phone);
 
         $('#editModal').show();
@@ -244,6 +277,26 @@ function updateCustomerList(customers) {
                 }
             });
         }
+    });
+
+    $('.toggle-status-btn').click(function() {
+        const id = $(this).data('id');
+        $.ajax({
+            url: './customer/ajax.php?action=toggle_status',
+            method: 'POST',
+            data: { id: id },
+            dataType: 'json',
+            success: function(res) {
+                if (res.success) {
+                    loadCustomers(currentPage);
+                } else {
+                    alert('Cập nhật trạng thái thất bại: ' + res.message);
+                }
+            },
+            error: function() {
+                alert('Lỗi khi cập nhật trạng thái');
+            }
+        });
     });
 }
 
@@ -314,9 +367,12 @@ $(document).ready(function() {
         e.preventDefault();
         const formData = {
             id: $('#edit-id').val(),
+            username: $('#edit-username').val(),
             name: $('#edit-name').val(),
-            powergroupid: $('#edit-powergroupid').val(),
             email: $('#edit-email').val(),
+            province_id: $('#edit-province_id').val(),
+            district_id: $('#edit-district_id').val(),
+            address_detail: $('#edit-address_detail').val(),
             phone: $('#edit-phone').val(),
             password: $('#edit-password').val()
         };

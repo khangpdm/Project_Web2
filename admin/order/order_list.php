@@ -79,9 +79,6 @@ $(document).ready(function() {
         const newUrl = '/1/Project_Web2/admin/header.php?page=donhang&' + formData;
         history.pushState(null, null, newUrl);
         
-        // Show loading
-        $('#orders-container').html('<div class="text-center py-4">Đang tải dữ liệu...</div>');
-        
         // Load filtered content via AJAX with page parameter
         $.ajax({
             url: '../admin/order/order_list_content.php?page=donhang',

@@ -59,6 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         echo json_encode(['status' => 'error', 'message' => $imageError]);
         exit;
     }
+    // Nếu không có ảnh được chọn, gán ảnh mặc định
+    if (empty($image)) {
+        $image = 'uploads/default/OIP.jpg';
+    }
 
     list($galleryImages, $galleryError) = handleGalleryUpload($_FILES, $_POST);
     if ($galleryError !== null) {
