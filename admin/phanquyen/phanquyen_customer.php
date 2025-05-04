@@ -47,7 +47,7 @@
     $permissions = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-<link rel="stylesheet" href="customer/css/style.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="./css/customer_styles.css?v=<?php echo time(); ?>">
 
 <div class="main-content">
     <h1>Phân quyền người dùng</h1>

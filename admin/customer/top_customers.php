@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="customer/css/top_customers.css">
+    <link rel="stylesheet" href="./css/top_customers.css">
     <title>Top Customers Statistics</title>
 </head>
 <body>

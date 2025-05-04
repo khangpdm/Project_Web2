@@ -10,6 +10,7 @@
                     <li><a href="?page=donhang" class="ajax-link">Đơn hàng</a></li>
                     <li><a href="?page=customer" class="ajax-link">Quản lý tài khoản</a></li>
                     <li><a href="?page=phanquyen" class="ajax-link">Phân quyền</a></li>
+                    <li><a href="?page=staff" class="ajax-link">Quản lý nhân viên</a></li>
                 </ul>
             </div>
         </div>
@@ -31,6 +32,9 @@
                             break;
                         case 'banquyen':
                             include 'phanquyen/phanquyen_customer.php';
+                            break;
+                        case 'staff':
+                            include 'staff/staff_listing.php';
                             break;                           
                         default:
                             include 'admin/system_dashboard.php';
@@ -66,7 +70,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: projectBasePath + '/ajax_content.php',
+            url: projectBasePath + '/admin/ajax_content.php',
             method: 'GET',
             data: {
                 page: page
