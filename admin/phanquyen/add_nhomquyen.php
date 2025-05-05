@@ -21,8 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
 
     // Thêm phân quyền
-    $db->insert("powergroup", $powerGroupData);
-    $idLasted = $db->getLastInsertId();
+    $idLasted= $db->insertAndGetID("powergroup", $powerGroupData);
     var_dump($idLasted);
 
     if ($idLasted!=null) {

@@ -1,5 +1,5 @@
 <?php
-require_once '../connect_db.php';
+require_once __DIR__ . '/../../admin/connect_db.php';
 $db = new connect_db();
 
 header('Content-Type: application/json');

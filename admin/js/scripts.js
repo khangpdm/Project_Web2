@@ -119,12 +119,13 @@ $(document).ready(function () {
 
                     let currentModule = getPageFromURL();
 
+                    // BUG
                     // Map page names to permission ids if needed
-                    const pagePermissionMap = {
-                        "STAFF": "NHANVIEN"
-                    };
+                    // const pagePermissionMap = {
+                    //     "STAFF": "NHANVIEN"
+                    // };
 
-                    let permissionKey = pagePermissionMap[currentModule] || currentModule;
+                    let permissionKey = currentModule;
 
                     // 1. Ẩn toàn bộ menu trước
                     $(".ajax-link").each(function () {
@@ -148,13 +149,16 @@ $(document).ready(function () {
                         }
                     });
 
-                    if (response[permissionKey] || response['powergroupid'] === 1) {
+                    if (response[permissionKey]
+                        || response['powergroupid'] === 1
+                    ) {
                         // Hiển thị module nếu có quyền or if admin
                         $("." + currentModule).show();
 
                         // Ẩn tất cả các nút hành động trước khi hiển thị chúng dựa trên quyền của module hiện tại
                         $(".permission-sua, .permission-xoa, .permission-them").hide();
-
+                        console.log(permissionKey);
+                        console.log(response[permissionKey]);
                         // Lặp qua quyền của module hiện tại để hiển thị các nút hành động
                         response[permissionKey].forEach(function (action) {
                             // Kiểm tra quyền cho các hành động như "sua", "xoa", "them"
@@ -213,4 +217,5 @@ $(document).ready(function () {
         checkPowerGroup();
     });
 
+    window.checkPowerGroup = checkPowerGroup;
 });

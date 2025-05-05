@@ -1,6 +1,5 @@
 <?php
-session_start();
-include __DIR__ . '/../connect_db.php';
+require_once __DIR__ . '/../../admin/connect_db.php';
 include 'phantrang.php';
 
 $config_name = "product";
@@ -209,7 +208,7 @@ ul {
             <?php foreach ($products as $row) { ?>
             <li id="product-<?= htmlspecialchars($row['masp']) ?>">
                 <div class="listing-prop listing-img">
-                    <img src="./<?= htmlspecialchars($row['image'] ?? '') ?>"
+                    <img src="../admin/<?= htmlspecialchars($row['image'] ?? '') ?>"
                         alt="<?= htmlspecialchars($row['name'] ?? '') ?>"
                         title="<?= htmlspecialchars($row['name'] ?? '') ?>" />
                 </div>
@@ -322,6 +321,7 @@ function loadProducts(page) {
                 $('#product-list').html('');
                 $('#pagination').html('');
             }
+            checkPowerGroup();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("AJAX error loading products:", textStatus, errorThrown, jqXHR.responseText);
@@ -355,7 +355,7 @@ function updateProductList(products) {
         li.id = "product-" + row.masp;
         li.innerHTML = `
             <div class="listing-prop listing-img">
-                <img src="./${row.image}" alt="${row.name}" title="${row.name}" />
+                <img src="../admin/${row.image}" alt="${row.name}" title="${row.name}" />
             </div>
             <div class="listing-prop listing-name">${row.name}</div>
             <div class="listing-prop listing-type">${row.tenloaisp || ''}</div>

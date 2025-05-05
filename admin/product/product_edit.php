@@ -1,5 +1,5 @@
 <?php
-include '../connect_db.php';
+require_once __DIR__ . '/../../admin/connect_db.php';
 $db = new connect_db();
 $productId = !empty($_GET['masp']) ? $_GET['masp'] : (!empty($_GET['id']) ? $_GET['id'] : null);
 if ($productId !== null) {
@@ -13,11 +13,14 @@ if ($productId !== null) {
 <div class="main-content">
     <h1><?= !empty($_GET['masp']) ? "Sửa sản phẩm" : "Thêm sản phẩm" ?></h1>
     <div id="content-box">
-<form id="editing-form" method="POST" action="<?= !empty($product) ? "?action=edit&masp=" . htmlspecialchars($productId) : "?action=add" ?>" enctype="multipart/form-data">
+        <form id="editing-form" method="POST"
+            action="<?= !empty($product) ? "?action=edit&masp=" . htmlspecialchars($productId) : "?action=add" ?>"
+            enctype="multipart/form-data">
             <input type="submit" title="Lưu sản phẩm" value="Lưu" />
             <div class="clear-both"></div>
             <div class="wrap-field">
-                <input type="hidden" name="masp" value="<?= !empty($product) ? htmlspecialchars($product['masp']) : "" ?>" />
+                <input type="hidden" name="masp"
+                    value="<?= !empty($product) ? htmlspecialchars($product['masp']) : "" ?>" />
                 <label>Loại sản phẩm: </label>
                 <select name="maloaisp" required>
                     <?php 
@@ -45,12 +48,15 @@ if ($productId !== null) {
             </div>
             <div class="wrap-field">
                 <label>Tên sản phẩm: </label>
-                <input type="text" name="tensp" value="<?= !empty($product) ? htmlspecialchars($product['tensp']) : "" ?>" required />
+                <input type="text" name="tensp"
+                    value="<?= !empty($product) ? htmlspecialchars($product['tensp']) : "" ?>" required />
                 <div class="clear-both"></div>
             </div>
             <div class="wrap-field">
                 <label>Giá sản phẩm: </label>
-                <input type="text" name="dongiasanpham" value="<?= !empty($product) ? number_format($product['dongiasanpham'], 0, ",", ".") : "" ?>" required />
+                <input type="text" name="dongiasanpham"
+                    value="<?= !empty($product) ? number_format($product['dongiasanpham'], 0, ",", ".") : "" ?>"
+                    required />
                 <div class="clear-both"></div>
             </div>
             <div class="wrap-field">
@@ -63,8 +69,9 @@ if ($productId !== null) {
                 <div class="right-wrap-field">
                     <div id="main-image-container">
                         <?php if (!empty($product['image'])) { ?>
-                            <img src="../<?= htmlspecialchars($product['image']) ?>" class="preview-image" style="max-width: 200px; margin-bottom: 10px;"/><br />
-                            <input type="hidden" name="existing_image" value="<?= htmlspecialchars($product['image']) ?>" />
+                        <img src="../<?= htmlspecialchars($product['image']) ?>" class="preview-image"
+                            style="max-width: 200px; margin-bottom: 10px;" /><br />
+                        <input type="hidden" name="existing_image" value="<?= htmlspecialchars($product['image']) ?>" />
                         <?php } ?>
                     </div>
                     <input type="file" name="image" accept="image/*" id="main-image-upload" />
@@ -76,14 +83,16 @@ if ($productId !== null) {
                 <div class="right-wrap-field">
                     <div id="gallery-container">
                         <?php if (!empty($product['gallery'])) { ?>
-                            <ul id="existing-gallery" style="list-style: none; padding: 0;">
-                                <?php foreach ($product['gallery'] as $image) { ?>
-                                    <li style="display: inline-block; margin-right: 10px; position: relative;">
-                                        <img src="../<?= htmlspecialchars($image['path']) ?>" class="preview-image" style="max-width: 100px; max-height: 100px;"/>
-                                        <a href="gallery_delete.php?id=<?= $image['id'] ?>" style="position: absolute; top: 0; right: 0; background: red; color: white; padding: 2px 5px;">X</a>
-                                    </li>
-                                <?php } ?>
-                            </ul>
+                        <ul id="existing-gallery" style="list-style: none; padding: 0;">
+                            <?php foreach ($product['gallery'] as $image) { ?>
+                            <li style="display: inline-block; margin-right: 10px; position: relative;">
+                                <img src="../<?= htmlspecialchars($image['path']) ?>" class="preview-image"
+                                    style="max-width: 100px; max-height: 100px;" />
+                                <a href="gallery_delete.php?id=<?= $image['id'] ?>"
+                                    style="position: absolute; top: 0; right: 0; background: red; color: white; padding: 2px 5px;">X</a>
+                            </li>
+                            <?php } ?>
+                        </ul>
                         <?php } ?>
                     </div>
                     <input type="file" multiple name="gallery[]" accept="image/*" id="gallery-upload" />
@@ -93,7 +102,8 @@ if ($productId !== null) {
             </div>
             <div class="wrap-field">
                 <label>Nội dung: </label>
-                <textarea name="content" id="product-content"><?= !empty($product) ? htmlspecialchars($product['content']) : "" ?></textarea>
+                <textarea name="content"
+                    id="product-content"><?= !empty($product) ? htmlspecialchars($product['content']) : "" ?></textarea>
                 <div class="clear-both"></div>
             </div>
         </form>
@@ -122,7 +132,7 @@ $(document).ready(function() {
         const files = e.target.files;
         if (files.length > 0) {
             let newPreviewHtml = '<ul style="list-style: none; padding: 0; margin-top: 10px;">';
-            
+
             Array.from(files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -130,7 +140,7 @@ $(document).ready(function() {
                         <li style="display: inline-block; margin-right: 10px;">
                             <img src="${e.target.result}" class="preview-image" style="max-width: 100px; max-height: 100px;"/>
                         </li>`;
-                    
+
                     // Update preview after last image
                     if (Array.from(files).indexOf(file) === files.length - 1) {
                         newPreviewHtml += '</ul>';
@@ -157,7 +167,7 @@ $(document).ready(function() {
                 var result = JSON.parse(response);
                 if (result.status === 'success') {
                     alert(result.message);
-                    location.href = '../header.php?page=sanpham';
+                    location.href = '../index.php?page=sanpham';
                 } else {
                     alert(result.message);
                 }

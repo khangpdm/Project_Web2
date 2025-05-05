@@ -97,7 +97,8 @@
             <input type="text" id="edit-district_id" name="district_id">
 
             <label for="edit-address_detail">Địa chỉ chi tiết</label>
-            <textarea id="edit-address_detail" name="address_detail" rows="3" style="resize:none; width: 100%;"></textarea>
+            <textarea id="edit-address_detail" name="address_detail" rows="3"
+                style="resize:none; width: 100%;"></textarea>
 
             <label for="edit-phone">Số điện thoại</label>
             <input type="text" id="edit-phone" name="phone" required>
@@ -190,6 +191,7 @@ function loadCustomers(page) {
                 $('#customer-list').html('');
                 $('#pagination').html('');
             }
+            checkPowerGroup();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("Lỗi tải danh sách người dùng:", textStatus, errorThrown, jqXHR.responseText);
@@ -284,7 +286,9 @@ function updateCustomerList(customers) {
         $.ajax({
             url: './customer/ajax.php?action=toggle_status',
             method: 'POST',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
             success: function(res) {
                 if (res.success) {

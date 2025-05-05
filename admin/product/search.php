@@ -1,6 +1,5 @@
 <?php
-session_start();
-include '../connect_db.php'; // Bao gồm lớp kết nối CSDL
+require_once __DIR__ . '/../../admin/connect_db.php';
 
 $config_name = "product";
 

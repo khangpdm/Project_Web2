@@ -19,13 +19,13 @@ $orders = $db->getOrdersWithFilters($status, $start_date, $end_date, $city, $dis
 <div class="main-content">
     <h1>Quản lý Đơn hàng</h1>
     <div class="listing-items">
-        
+
         <!-- Filter Form -->
         <div class="listing-search">
             <form id="filterForm">
                 <fieldset>
                     <legend>Tìm kiếm đơn hàng:</legend>
-                    Tình trạng: 
+                    Tình trạng:
                     <select name="status">
                         <option value="">Tất cả</option>
                         <option value="0" <?= $status === '0' ? 'selected' : '' ?>>Chưa xác nhận</option>
@@ -44,14 +44,14 @@ $orders = $db->getOrdersWithFilters($status, $start_date, $end_date, $city, $dis
                     <select name="city">
                         <option value="">Tất cả</option>
                         <?php foreach($cities as $c): ?>
-                            <option value="<?= $c ?>" <?= $city === $c ? 'selected' : '' ?>><?= $c ?></option>
+                        <option value="<?= $c ?>" <?= $city === $c ? 'selected' : '' ?>><?= $c ?></option>
                         <?php endforeach ?>
                     </select>
                     Quận:
                     <select name="district">
                         <option value="">Tất cả</option>
                         <?php foreach($districts as $d): ?>
-                            <option value="<?= $d ?>" <?= $district === $d ? 'selected' : '' ?>><?= $d ?></option>
+                        <option value="<?= $d ?>" <?= $district === $d ? 'selected' : '' ?>><?= $d ?></option>
                         <?php endforeach ?>
                     </select>
                     <button type="submit">Lọc</button>
@@ -74,11 +74,11 @@ $(document).ready(function() {
     $('#filterForm').on('submit', function(e) {
         e.preventDefault();
         const formData = $(this).serialize();
-        
+
         // Update URL with page parameter in header.php path
-        const newUrl = '/1/Project_Web2/admin/header.php?page=donhang&' + formData;
+        const newUrl = '/main/Project_Web2/admin/header.php?page=donhang&' + formData;
         history.pushState(null, null, newUrl);
-        
+
         // Load filtered content via AJAX with page parameter
         $.ajax({
             url: '../admin/order/order_list_content.php?page=donhang',
@@ -105,13 +105,13 @@ $(document).ready(function() {
             console.log('Update button clicked');
             const orderId = $(this).data('order-id');
             const currentStatus = parseInt($(this).data('current-status'));
-            
+
             // Only allow forward status progression
             let options = '';
             if (currentStatus < 1) options += '<option value="1">Đã xác nhận</option>';
             if (currentStatus < 2) options += '<option value="2">Đã giao</option>';
             options += '<option value="3">Huỷ đơn</option>';
-            
+
             Swal.fire({
                 title: 'Cập nhật trạng thái',
                 html: `<select id="statusSelect" class="swal2-select">${options}</select>`,
@@ -127,7 +127,7 @@ $(document).ready(function() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log('Attempting to update status to:', result.value.status);
-                    $.post('/1/Project_Web2/admin/order/update_status.php', {
+                    $.post('/main/Project_Web2/admin/order/update_status.php', {
                         order_id: orderId,
                         status: result.value.status
                     }, function(response) {
@@ -142,16 +142,18 @@ $(document).ready(function() {
                                 $('#filterForm').trigger('submit');
                             });
                         } else {
-                            Swal.fire('Lỗi', response.message || 'Có lỗi xảy ra', 'error');
+                            Swal.fire('Lỗi', response.message || 'Có lỗi xảy ra',
+                                'error');
                         }
                     }).fail(function(xhr) {
-                        Swal.fire('Lỗi', 'Không thể kết nối đến server: ' + xhr.status, 'error');
+                        Swal.fire('Lỗi', 'Không thể kết nối đến server: ' + xhr.status,
+                            'error');
                     });
                 }
             });
         });
     }
-    
+
     // Initialize handlers on first load
     initStatusUpdateHandlers();
 });

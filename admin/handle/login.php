@@ -1,5 +1,5 @@
 <?php 
-include('../connect_db.php');
+require_once __DIR__ . '/../../admin/connect_db.php';
 
 session_start();
 
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($staff) {
             // Temporary fix: direct password comparison instead of password_verify
-            if ($password === $staff['password']) {
+            if (password_verify($password,$staff['password'])) {
                 $response = ["status" => "success", "message" => "Đăng nhập thành công!"];
                 $_SESSION['mastaff'] = $staff['mastaff'];
                 $response['staffname'] = $staff['staffname'];

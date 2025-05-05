@@ -1,6 +1,6 @@
 <!-- Thêm khách hàng -->
 <?php
-require_once '../connect_db.php';
+require_once __DIR__ . '/../../admin/connect_db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $db = new connect_db();

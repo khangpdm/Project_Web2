@@ -2,9 +2,9 @@
 
 class connect_db {
     private $host = "localhost";
-    private $db_name = "treeshop2";
+    private $db_name = "treeshop";
     private $username = "root";
-    private $password = "";
+    private $password = "123";
     private $conn;
 
     // Kết nối CSDL
@@ -65,7 +65,7 @@ class connect_db {
     public function insert($table, $data) {
 
         // Add created_time and last_updated only for tables that have these columns
-        $tablesWithTimestamps = ['product', 'order', 'bill', 'supplier', 'staff', 'producttype', 'entry_form'];
+        $tablesWithTimestamps = ['product'];
 
         if (in_array($table, $tablesWithTimestamps)) {
             $data['created_time'] = date('Y-m-d H:i:s'); 
@@ -78,11 +78,24 @@ class connect_db {
         return $this->query($sql, $data);
     }
 
+  public function insertAndGetID($table, $data) {
+        $columns = implode(", ", array_keys($data));
+        $values = ":" . implode(", :", array_keys($data));
+        $sql = "INSERT INTO $table ($columns) VALUES ($values)";
+        
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt->execute($data)) {
+            return $this->conn->lastInsertId(); // chỉ trả ID nếu thành công
+        } else {
+            return null; // insert thất bại
+        }
+    }
+    
     // Cập nhật dữ liệu
     public function update($table, $data, $id) {
 
         // Add last_updated only for tables that have this column
-        $tablesWithLastUpdated = ['product', 'order', 'bill', 'supplier', 'staff', 'producttype', 'entry_form'];
+        $tablesWithLastUpdated = ['product'];
 
         if (in_array($table, $tablesWithLastUpdated)) {
             $data['last_updated'] = date('Y-m-d H:i:s');  

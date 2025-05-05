@@ -1,5 +1,5 @@
 <?php
-include '../connect_db.php';
+require_once __DIR__ . '/../../admin/connect_db.php';
 include 'function.php';
 
 $db = new connect_db();

@@ -74,9 +74,16 @@ switch ($action) {
             exit;
         }
 
+        // Generate mastaff automatically in format STAFF001
+        $maxIdRow = $db->query("SELECT MAX(CAST(SUBSTRING(mastaff, 6) AS UNSIGNED)) AS max_num FROM staff")->fetch();
+        $maxNum = $maxIdRow['max_num'] ?? 0;
+        $newNum = $maxNum + 1;
+        $newMastaff = 'STAFF' . str_pad($newNum, 3, '0', STR_PAD_LEFT);
+
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $staffData = [
+            'mastaff' => $newMastaff,
             'staffname' => $staffname,
             'email' => $email,
             'address' => $address ?: null,

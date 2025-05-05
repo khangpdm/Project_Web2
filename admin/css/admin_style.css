@@ -1,0 +1,140 @@
+/* Reset some default styles */
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Body styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+/* Admin heading panel */
+#admin-heading-panel {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    color: white;
+    padding: 15px 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px;
+}
+
+/* Left panel styles */
+.left-panel {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Right panel styles */
+.right-panel {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.right-panel a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.right-panel a:hover {
+    color: #ffdd57;
+}
+
+.right-panel img {
+    vertical-align: middle;
+}
+
+/* Content wrapper */
+#content-wrapper {
+    display: flex;
+    margin-top: 20px;
+}
+
+/* Left menu */
+.left-menu {
+    width: 25%;
+    min-width: 200px;
+    background-color: #ffffff;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.menu-heading {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+.menu-items ul {
+    padding-left: 10px;
+}
+
+.menu-items li {
+    margin: 10px 0;
+}
+
+.menu-items a {
+    text-decoration: none;
+    color: #333;
+    padding: 8px 10px;
+    border-radius: 4px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.menu-items a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Main content */
+.main-contaniner {
+    flex: 1;
+    /* Chiếm hết chiều rộng còn lại */
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    /* Đảm bảo chiều cao đầy đủ */
+    margin-left: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-menu {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .main-contaniner {
+        width: 100%;
+    }
+}
