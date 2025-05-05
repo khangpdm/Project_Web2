@@ -23,29 +23,29 @@
             <div class="product-group">
                 <div class="product-item">
                     <img src="img/caykimtien.jpg" alt="Cây Kim Tiền">
-                    <p>Cây Kim Tiền - 250K</p>
+                    <p>Cây Kim Tiền</p>
                 </div>
                 <div class="product-item">
                     <img src="img/cayluoiho.jpg" alt="Cây Lưỡi Hổ">
-                    <p>Cây Lưỡi Hổ - 200K</p>
+                    <p>Cây Lưỡi Hổ</p>
                 </div>
                 <div class="product-item">
                     <img src="img/caytrauba.jpg" alt="Cây Trầu Bà">
-                    <p>Cây Trầu Bà - 180K</p>
+                    <p>Cây Trầu Bà</p>
                 </div>
             </div>
             <div class="product-group">
                 <div class="product-item">
                     <img src="img/cayphattai.jpg" alt="Cây Phát Tài">
-                    <p>Cây Phát Tài - 380K</p>
+                    <p>Cây Phát Tài</p>
                 </div>
                 <div class="product-item">
                     <img src="img/caysenda.jpg" alt="Cây Sen Đá">
-                    <p>Cây Sen Đá - 100K</p>
+                    <p>Cây Sen Đá</p>
                 </div>
                 <div class="product-item">
                     <img src="img/caykimngan.jpg" alt="Cây Kim Ngân">
-                    <p>Cây Kim Ngân - 120K</p>
+                    <p>Cây Kim Ngân</p>
                 </div>
             </div>
         </div>
@@ -68,25 +68,6 @@
                 <h3>Hỗ trợ 24/7</h3>
                 <p>Luôn sẵn sàng giải đáp mọi thắc mắc của bạn</p>
             </div>
+            
         </div>
     </section>
-    <!-- <section class="trangchu-footer">
-        <div class="trangchu-footer-content">
-            <p class="trangchu-footer-content-header">CÔNG TY TNHH GREEN HAVEN</p>
-            <div class="promo-item-footer">
-                <p><i class="fa-solid fa-house">              
-                </i>Văn phòng: 273 An Dương Vương, Phường 3, Quận 5</p>  
-                <p><i class="fa-solid fa-phone"></i>Liên hệ:0123456789</p>
-                <p><i class="fa-solid fa-envelope"></i>greenhaven@gmail.com</p>
-            </div>
-        </div>
-        <div class="trangchu-footer-content">
-            <div class="promo-item-footer">
-                <h4>Dịch vụ</h4>
-                <p>Điều khoản sử dụng</p>
-                <p>Chính sách bảo mật thông tin</p>
-                <p>Chính sách bảo mật thanh toán</p>
-                <p>Giới thiệu về chúng tôi</p>
-            </div>
-        </div>
-    </section> -->

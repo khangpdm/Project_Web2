@@ -4,16 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/trangchu.css">
+    <title>Green Haven</title>
+    <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 </head>
 
 <body>
-    <?php include("layout/headerr.php"); ?>
-  
+    <?php 
+    include("login.php");
+    include("layout/headerr.php"); ?>
+
     <?php
     $page = isset($_GET['page']) ? $_GET['page'] : 'trangchu';
 
@@ -27,6 +28,13 @@
         case 'chinhsach':
             include('chinhsach.php');
             break;
+        case 'giohang':
+            include('giohang.php');
+            break;
+        case 'checkout':
+            include('checkout.php');
+            break;
+
         default:
             echo "Trang không tồn tại";
             break;
@@ -36,7 +44,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <script src="js/scripts.js"></script>
+    <script src="js/scripts.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>
