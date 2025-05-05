@@ -1,3 +1,5 @@
+<?php include('connect_db.php'); ?>
+<link rel="stylesheet" type="text/css" href="css/log_in.css">
 <div id="overlay">
     <div class="Authentication-Form-Dad">
         <form id="Authentication-Form" method="post">

@@ -69,8 +69,16 @@ $(document).ready(function() {
             projectBasePath = pathParts.slice(0, 3).join('/');
         }
 
+        // Fix to avoid duplicated 'admin' in URL
+        var ajaxUrl = '';
+        if (projectBasePath.toLowerCase().endsWith('/admin')) {
+            ajaxUrl = projectBasePath + '/ajax_content.php';
+        } else {
+            ajaxUrl = projectBasePath + '/admin/ajax_content.php';
+        }
+
         $.ajax({
-            url: projectBasePath + '/admin/ajax_content.php',
+            url: ajaxUrl,
             method: 'GET',
             data: {
                 page: page

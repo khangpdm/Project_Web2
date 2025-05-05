@@ -1,35 +1,36 @@
 <?php
-include('../database/database.php');
+include('../connect_db.php');
 
 session_start();
 
 header('Content-Type: application/json');
 
+$db = new connect_db();
+$conn = $db->getConnection();
+
 if ($_POST['action'] === 'check') {
     if (isset($_SESSION['mastaff'])) {
         $mastaff = $_SESSION['mastaff'];
-        $check_sql = "SELECT * FROM staff where mastaff = ?";
+        $check_sql = "SELECT * FROM staff where mastaff = :mastaff";
         $stmt = $conn->prepare($check_sql);
         if (!$stmt) {
             http_response_code(500);
-            echo json_encode(['status' => 'error', 'message' => 'SQL error: ' . $conn->error]);
+            echo json_encode(['status' => 'error', 'message' => 'SQL error']);
             exit();
         }
-        $stmt->bind_param("s", $mastaff);
+        $stmt->bindParam(':mastaff', $mastaff);
         if (!$stmt->execute()) {
             http_response_code(500);
-            echo json_encode(['status' => 'error', 'message' => 'SQL execute error: ' . $stmt->error]);
+            echo json_encode(['status' => 'error', 'message' => 'SQL execute error']);
             exit();
         }
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            $staff = $result->fetch_assoc();
+        $staff = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($staff) {
             $_SESSION['staffname'] = $staff['staffname'];
             echo json_encode(["loggedIn" => true, "staffname" => $staff['staffname']]);
         } else {
             echo json_encode(["loggedIn" => false]);
         }
-        $stmt->close();
     } else {
         echo json_encode(["loggedIn" => false]);
     }
@@ -43,22 +44,23 @@ if ($_POST['action'] === 'check') {
     if (isset($_SESSION['mastaff'])){
         $mastaff = $_SESSION['mastaff'];
 
-        $check_sql = "SELECT pfp.funcid, pfp.permissionid FROM staff s LEFT JOIN powergroup_func_permission pfp ON s.powergroupid = pfp.powergroupid WHERE s.mastaff = ?";
-        $stmt = $conn->prepare(query: $check_sql);
+        $check_sql = "SELECT pfp.funcid, pfp.permissionid FROM staff s LEFT JOIN powergroup_func_permission pfp ON s.powergroupid = pfp.powergroupid WHERE s.mastaff = :mastaff";
+        $stmt = $conn->prepare($check_sql);
         if (!$stmt) {
             http_response_code(500);
-            echo json_encode(['status' => 'error', 'message' => 'SQL error: ' . $conn->error]);
+            echo json_encode(['status' => 'error', 'message' => 'SQL error']);
             exit();
         }
-        $stmt->bind_param("s",$mastaff);
+        $stmt->bindParam(':mastaff', $mastaff);
         if (!$stmt->execute()) {
             http_response_code(500);
-            echo json_encode(['status' => 'error', 'message' => 'SQL execute error: ' . $stmt->error]);
+            echo json_encode(['status' => 'error', 'message' => 'SQL execute error']);
             exit();
         }
-        $result = $stmt->get_result();
-        if ($result->num_rows>0){
-            while($powergroupid=$result->fetch_assoc()){
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response = array();
+        if (count($result) > 0){
+            foreach($result as $powergroupid){
                $permissionid = $powergroupid['permissionid'];
                $funcid = $powergroupid['funcid'];
                if (!isset($response[$permissionid]))
@@ -73,6 +75,6 @@ if ($_POST['action'] === 'check') {
     }
 }
 
-$conn->close();
+$conn = null;
 exit();
 ?>

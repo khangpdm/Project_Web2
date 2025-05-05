@@ -78,6 +78,7 @@ $(document).ready(function () {
             data: data,
             dataType: "json",
             success: function (response) {
+                console.log("Login response:", response);
                 if (response.status == "success") {
                     $(".error-message").remove();
                     alert(response.message);
@@ -95,6 +96,10 @@ $(document).ready(function () {
                     });
                 }
             },
+            error: function (xhr, status, error) {
+                console.error("Login AJAX error:", status, error);
+                console.log("Response text:", xhr.responseText);
+            }
         });
     });
 
@@ -114,6 +119,13 @@ $(document).ready(function () {
 
                     let currentModule = getPageFromURL();
 
+                    // Map page names to permission ids if needed
+                    const pagePermissionMap = {
+                        "STAFF": "NHANVIEN"
+                    };
+
+                    let permissionKey = pagePermissionMap[currentModule] || currentModule;
+
                     // 1. Ẩn toàn bộ menu trước
                     $(".ajax-link").each(function () {
                         const page = $(this).attr("href").split("page=")[1]?.toUpperCase();
@@ -123,6 +135,12 @@ $(document).ready(function () {
                             return; // bỏ qua xử lý tiếp theo
                         }
 
+                        // Always show menu for admin powergroupid = 1
+                        if (response['powergroupid'] === 1) {
+                            $(this).show();
+                            return;
+                        }
+
                         if (response[page] && response[page].includes("xem")) {
                             $(this).show();
                         } else {
@@ -130,15 +148,15 @@ $(document).ready(function () {
                         }
                     });
 
-                    if (response[currentModule]) {
-                        // Hiển thị module nếu có quyền
+                    if (response[permissionKey] || response['powergroupid'] === 1) {
+                        // Hiển thị module nếu có quyền or if admin
                         $("." + currentModule).show();
 
                         // Ẩn tất cả các nút hành động trước khi hiển thị chúng dựa trên quyền của module hiện tại
                         $(".permission-sua, .permission-xoa, .permission-them").hide();
 
                         // Lặp qua quyền của module hiện tại để hiển thị các nút hành động
-                        response[currentModule].forEach(function (action) {
+                        response[permissionKey].forEach(function (action) {
                             // Kiểm tra quyền cho các hành động như "sua", "xoa", "them"
                             if (action === "sua") {
                                 $(".permission-sua").show();
